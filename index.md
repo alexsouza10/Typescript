@@ -622,28 +622,214 @@ Organize seu código de forma clara e mantenha uma estrutura de diretórios bem 
 
 ### 17.1 Padrão Singleton
 
-O Padrão Singleton garante que uma classe tenha apenas uma instância e fornece um ponto global de acesso a essa instância.
+O Padrão Singleton garante que uma classe tenha apenas uma instância e fornece um ponto global de acesso a essa instância. Isso é útil quando você deseja ter uma única instância de uma classe que coordena ações em todo o seu aplicativo.
+
+```typescript
+class Singleton {
+  private static instance: Singleton | null = null;
+
+  private constructor() {}
+
+  static getInstance(): Singleton {
+    if (this.instance === null) {
+      this.instance = new Singleton();
+    }
+    return this.instance;
+  }
+
+  someMethod(): void {
+    console.log("Método da instância Singleton chamado.");
+  }
+}
+
+const instance1 = Singleton.getInstance();
+const instance2 = Singleton.getInstance();
+
+console.log(instance1 === instance2); // true, pois ambas as variáveis se referem à mesma instância Singleton
+```
 
 ### 17.2 Padrão Factory
 
-O Padrão Factory cria objetos com base em uma interface e permite que as subclasses decidam qual classe instanciar.
+O Padrão Factory cria objetos com base em uma interface e permite que as subclasses decidam qual classe instanciar. Isso é útil quando você deseja criar objetos sem especificar a classe exata que será instanciada.
+
+```typescript
+interface Animal {
+  speak(): void;
+}
+
+class Dog implements Animal {
+  speak(): void {
+    console.log("O cachorro faz au au!");
+  }
+}
+
+class Cat implements Animal {
+  speak(): void {
+    console.log("O gato faz miau!");
+  }
+}
+
+class AnimalFactory {
+  createAnimal(animalType: string): Animal {
+    switch (animalType) {
+      case "dog":
+        return new Dog();
+      case "cat":
+        return new Cat();
+      default:
+        throw new Error("Tipo de animal desconhecido.");
+    }
+  }
+}
+
+const factory = new AnimalFactory();
+const myDog = factory.createAnimal("dog");
+const myCat = factory.createAnimal("cat");
+
+myDog.speak(); // O cachorro faz au au!
+myCat.speak(); // O gato faz miau!
+```
 
 ### 17.3 Padrão Observer
 
-O Padrão Observer permite que um objeto (sujeito) notifique seus observadores quando seu estado muda.
+O Padrão Observer permite que um objeto (sujeito) notifique seus observadores quando seu estado muda. Isso é útil quando você tem objetos que dependem do estado de outros objetos e precisa manter essas dependências atualizadas.
+
+```typescript
+interface Observer {
+  update(message: string): void;
+}
+
+class ConcreteObserver implements Observer {
+  update(message: string): void {
+    console.log(`Observador recebeu uma atualização: ${message}`);
+  }
+}
+
+class Subject {
+  private observers: Observer[] = [];
+
+  addObserver(observer: Observer): void {
+    this.observers.push(observer);
+  }
+
+  notify(message: string): void {
+    for (const observer of this.observers) {
+      observer.update(message);
+    }
+  }
+}
+
+const subject = new Subject();
+const observer1 = new ConcreteObserver();
+const observer2 = new ConcreteObserver();
+
+subject.addObserver(observer1);
+subject.addObserver(observer2);
+
+subject.notify("Estado atualizado!"); // Ambos os observadores serão notificados
+```
 
 ### 17.4 Padrão Strategy
 
-O Padrão Strategy define uma família de algoritmos, encapsula cada um deles e torna-os intercambiáveis.
+O Padrão Strategy define uma família de algoritmos, encapsula cada um deles e torna-os intercambiáveis. Isso é útil quando você deseja que um objeto possa alterar seu comportamento dinamicamente durante a execução.
 
-## 18. Manipulação de Exceções
+```typescript
+interface PaymentStrategy {
+  pay(amount: number): void;
+}
 
+class CreditCardPayment implements PaymentStrategy {
+  pay(amount: number): void {
+    console.log(`Pagamento com cartão de crédito de $${amount}`);
+  }
+}
+
+class PayPalPayment implements PaymentStrategy {
+  pay(amount: number): void {
+    console.log(`Pagamento com PayPal de $${amount}`);
+  }
+}
+
+class ShoppingCart {
+  private paymentStrategy: PaymentStrategy;
+
+  constructor(paymentStrategy: PaymentStrategy) {
+    this.paymentStrategy = paymentStrategy;
+  }
+
+  checkout(amount: number): void {
+    this.paymentStrategy.pay(amount);
+  }
+}
+
+const cart1 = new ShoppingCart(new CreditCardPayment());
+cart1.checkout(100); // Pagamento com cartão de crédito de $100
+
+const cart2 = new ShoppingCart(new PayPalPayment());
+cart2.checkout(50); // Pagamento com PayPal de $50
+```
+
+### 18. Manipulação de Exceções
+
+**Como lidar com exceções personalizadas em TypeScript**
+
+Você pode criar exceções personalizadas estendendo a classe `Error`. Aqui está um exemplo:
+
+```typescript
+class MinhaExcecao extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "MinhaExcecao";
+    }
+}
+
+try {
+    throw new MinhaExcecao("Isso é uma exceção personalizada.");
+} catch (error) {
+    if (error instanceof MinhaExcecao) {
+        console.error("Exceção personalizada capturada:", error.message);
+    } else {
+        console.error("Outra exceção capturada:", error.message);
+    }
+}
+```
 ### 18.1 Exceções Personalizadas
 
-Você pode criar exceções personalizadas estendendo a classe `Error` e lançá-las em situações específicas.
+Para criar uma exceção personalizada, siga os passos abaixo:
 
-### 18.2 Lidando com Exceções
+1. Crie uma classe que estende a classe `Error`.
 
-Use blocos `try-catch` para lidar com exceções e trate-as de acordo com a necessidade do seu programa.
+   ```typescript
+   class MinhaExcecao extends Error {
+       constructor(message: string) {
+           super(message);
+           this.name = "MinhaExcecao";
+       }
+   }
+   ```
+
+   Neste exemplo, `MinhaExcecao` é uma classe que representa uma exceção personalizada. Ela estende a classe `Error` e define um construtor que aceita uma mensagem de erro como parâmetro.
+
+2. Dentro do construtor, chame o construtor da classe pai (`super`) com a mensagem de erro e atribua um nome à sua exceção personalizada.
+
+### 18.2 Lidando com Exceções Personalizadas
+
+Depois de criar uma exceção personalizada, você pode usá-la em seu código e capturá-la usando blocos `try-catch`. Aqui está um exemplo de como fazer isso:
+
+```typescript
+try {
+    throw new MinhaExcecao("Isso é uma exceção personalizada.");
+} catch (error) {
+    if (error instanceof MinhaExcecao) {
+        console.error("Exceção personalizada capturada:", error.message);
+    } else {
+        console.error("Outra exceção capturada:", error.message);
+    }
+}
+```
+
+Neste exemplo, estamos lançando a exceção personalizada `MinhaExcecao` dentro de um bloco `try`. Em seguida, no bloco `catch`, verificamos se o erro capturado é uma instância da nossa exceção personalizada usando `instanceof`. Se for, imprimimos a mensagem da exceção personalizada. Caso contrário, tratamos o erro como "Outra exceção".
+
+Isso permite que você identifique e lide especificamente com suas exceções personalizadas no código, o que pode ser útil para depuração e tratamento de erros específicos ao seu aplicativo.
 
 Isso conclui o Guia de Estudos TypeScript! Continue explorando os tópicos e praticando para se tornar um desenvolvedor TypeScript experiente. Boa sorte!
