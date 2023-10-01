@@ -1,4 +1,3 @@
-
 # Guia de Estudos TypeScript ![Logo TypeScript](https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-typescript-an-open-source-programming-language-developed-and-maintained-by-microsoft-logo-color-tal-revivo.png)
 
 Bem-vindo ao Guia de Estudos TypeScript! Este guia abrangente tem como objetivo fornecer um caminho estruturado para aprender TypeScript, uma linguagem de programação tipada e um superset do JavaScript. O TypeScript é amplamente utilizado no desenvolvimento web moderno, oferecendo segurança e produtividade. Vamos começar a explorar este universo emocionante.
@@ -66,8 +65,15 @@ Bem-vindo ao Guia de Estudos TypeScript! Este guia abrangente tem como objetivo 
 18. Manipulação de Exceções
     - 18.1 Exceções Personalizadas
     - 18.2 Lidando com Exceções
+19. Estruturas de Repetição
+    - 19.1 While Loop
+    - 19.2 Do...While Loop
+    - 19.3 For Loop
+    - 19.4 For...of Loop
+    - 19.5 For...in Loop
 
 ---
+
 ## 1. Introdução ao TypeScript
 
 ### 1.1 O que é TypeScript?
@@ -131,9 +137,7 @@ Os arrays no TypeScript podem ser declarados e tipados da seguinte forma:
 const ids: number[] = [1, 2, 3, 4, 5];
 ```
 
-###
-
- 3.2 Tuplas
+### 3.2 Tuplas
 
 Tuplas permitem representar arrays com tipos específicos e tamanhos fixos:
 
@@ -170,7 +174,9 @@ enum Direction {
 
 Funções podem ser tipadas em relação aos parâmetros e ao valor de retorno:
 
-```typescript
+```
+
+typescript
 function add(x: number, y: number): number {
   return x + y;
 }
@@ -429,9 +435,7 @@ Você pode criar decorators de classe para adicionar funcionalidades às classes
 
 ```typescript
 function logClass(target: Function) {
-  console.log(`Classe:
-
- ${target.name}`);
+  console.log(`Classe: ${target.name}`);
 }
 
 @logClass
@@ -468,7 +472,9 @@ console.log(example.greet('Alice'));
 
 ### 12.1 Tipos Condicionais
 
-Tipos condicionais permitem criar tipos com base em condições:
+Tipos condicionais permitem criar tipos com base em condições
+
+:
 
 ```typescript
 type Choice<T> = T extends string ? 'text' : 'other type';
@@ -521,33 +527,68 @@ const Counter: React.FC<CounterProps> = ({ initialValue }) => {
 
 Para usar TypeScript com Node.js, configure seu projeto com as tipagens corretas e compile seu código TypeScript para JavaScript para executá-lo no ambiente Node.js.
 
-## 14. Testes e TDD (Desenvolvimento Orientado a Testes)
+## 14. Estruturas de Repetição
 
-### 14.1 Configurando o Ambiente de Testes
+### 14.1 while
 
-Você pode configurar testes usando bibliotecas como Jest, Mocha ou Jasmine. Configure seu ambiente de teste e escreva testes para suas funções e classes TypeScript.
-
-### 14.2 Escrevendo Testes com Jest
-
-Exemplo de teste simples usando Jest:
+O loop `while` executa um bloco de código enquanto uma condição especificada for verdadeira:
 
 ```typescript
-// math.ts
-export function add(a: number, b: number): number {
-  return a + b;
+let i = 0;
+while (i < 5) {
+  console.log(i);
+  i++;
 }
-
-// math.test.ts
-import { add } from './math';
-
-test('soma 1 + 2 é igual a 3', () => {
-  expect(add(1, 2)).toBe(3);
-});
 ```
 
-### 14.3 Práticas de TDD
+### 14.2 do...while
 
-Praticar o Desenvolvimento Orientado a Testes (TDD) envolve escrever testes antes de implementar o código. Isso ajuda a garantir que seu código seja testado e funcione conforme o esperado.
+O loop `do...while` executa um bloco de código pelo menos uma vez e, em seguida, repete o loop enquanto uma condição especificada for verdadeira:
+
+```typescript
+let i = 0;
+do {
+  console.log(i);
+  i++;
+} while (i < 5);
+```
+
+### 14.3 for
+
+O loop `for` é usado para iterar sobre um bloco de código várias vezes. Geralmente é usado quando você sabe quantas vezes deseja que o loop seja executado:
+
+```typescript
+for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
+```
+
+### 14.4 for...of
+
+O loop `for...of` é usado para iterar sobre elementos iteráveis, como arrays:
+
+```typescript
+const colors = ['red', 'green', 'blue'];
+
+for (const color of colors) {
+  console.log(color);
+}
+```
+
+### 14.5 for...in
+
+O loop `for...in` é usado para iterar sobre as propriedades enumeráveis de um objeto:
+
+```typescript
+const person = {
+  name: 'Alice',
+  age: 30,
+};
+
+for (const key in person) {
+  console.log(`${key}: ${person[key]}`);
+}
+```
 
 ## 15. Ferramentas de Desenvolvimento
 
